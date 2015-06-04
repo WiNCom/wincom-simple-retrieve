@@ -24,6 +24,7 @@ public class WinRetrieveContentPanel extends JScrollPane {
 	private FileRetrievalAPI fileRetrievalAPI;
 
 	public WinRetrieveContentPanel(FileRetrievalAPI fileRetrievalAPI) {
+        this.fileRetrievalAPI = fileRetrievalAPI;
 		createTable();
 		this.getViewport().add(contentTable);
 	}
@@ -49,12 +50,15 @@ public class WinRetrieveContentPanel extends JScrollPane {
 				DefaultTableModel model = (DefaultTableModel)contentTable.getModel();
 				
 				int[] selectedRows = contentTable.getSelectedRows();
+				ArrayList<String> selectedFilenames = new ArrayList<>();
+                ArrayList<String> selectedDsNetIds = new ArrayList<>();
+
 				for(int rowIndex : selectedRows) {
-					String dsNetId = (String)model.getValueAt(rowIndex, 4);
-					String filename = (String)model.getValueAt(rowIndex, 0);
-					fileRetrievalAPI.downloadId(filename, dsNetId);
-					fileRetrievalAPI.incrementDownloadCount(dsNetId);
+					selectedDsNetIds.add((String)model.getValueAt(rowIndex, 4));
+					selectedFilenames.add((String)model.getValueAt(rowIndex, 0));
 				}
+
+                fileRetrievalAPI.downloadMany(selectedFilenames, selectedDsNetIds);
 			}
 		});
 		

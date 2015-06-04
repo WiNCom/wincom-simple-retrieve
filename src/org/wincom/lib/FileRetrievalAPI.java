@@ -1,7 +1,5 @@
 package org.wincom.lib;
 
-import org.omg.CORBA.DATA_CONVERSION;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
@@ -27,10 +25,10 @@ public class FileRetrievalAPI {
     }
 
     public void downloadId(String filename, String dsNetId) {
-        dsNet.downloadId(filename, dsNetId);
+        (new Thread(new FileDownloaderThread(dsNet, mongo, filename, dsNetId))).start();
     }
 
-    public void incrementDownloadCount(String dsNetId) {
-        mongo.incrementDownloadCount(dsNetId);
+    public void downloadMany(ArrayList<String> filenames, ArrayList<String> dsNetIds) {
+        (new Thread(new FileDownloaderThread(dsNet, mongo, filenames, dsNetIds))).start();
     }
 }

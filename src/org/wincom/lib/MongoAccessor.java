@@ -35,22 +35,22 @@ public class MongoAccessor {
 			mongoClient = new MongoClient(address);
 			databases = mongoClient.getDatabaseNames();
 		} catch (UnknownHostException e) {
-			System.out.println("[-] Host Name '" + host + "' is invalid!");
+			System.out.println("[-] Mongo: Host Name '" + host + "' is invalid!");
 			return false;
 		} catch(MongoTimeoutException e) {
-			System.out.println("[-] We can't seem to connect to mongo");
+			System.out.println("[-] Mongo: We can't seem to connect to mongo");
 			return false;
 		}
 		
 		if(!databases.contains(database)) {
-			System.out.println("[-] Database Doesn't Exist Within Mongo!");
+			System.out.println("[-] Mongo: Database Doesn't Exist Within Mongo!");
 			return false;
 		};
 		
 		db = mongoClient.getDB(database);
 		
 		if(!db.collectionExists(collectionName)) {
-			System.out.println("[-] Collection Doesn't Exist Within Database!");
+			System.out.println("[-] Mongo: Collection Doesn't Exist Within Database!");
 			return false;
 		}
 		
@@ -74,7 +74,7 @@ public class MongoAccessor {
 	}
 	
 	public ArrayList<String> getDistinct(String columnName) {
-		ArrayList<String> distinctResults = new ArrayList<String>();
+		ArrayList<String> distinctResults = new ArrayList<>();
 		
 		List<String> queryResults = collection.distinct(columnName);
 		Collections.sort(queryResults);
@@ -105,6 +105,8 @@ public class MongoAccessor {
 			Map.Entry<String,String> entry = (Map.Entry)iterator.next();
 			query.append(entry.getKey(), entry.getValue());
 		}
+
+		System.out.println("[+] Mongo: Executing Mongo Query: " + query.toString());
 		
 		DBCursor queryResults = collection.find(query);
 		try {
@@ -124,7 +126,8 @@ public class MongoAccessor {
 		} finally {
 			queryResults.close();
 		}
-		
+
+		System.out.println("[+] Mongo: Returned " + results.size() + " Record(s)");
 		return results;
 	}
 	

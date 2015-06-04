@@ -117,7 +117,7 @@ public class WinRetrieveSearchPanel extends JPanel {
 	}
 	
 	private ArrayList<FileRecord> executeSearch() {
-		System.out.println("Executing Search...");
+		System.out.println("[+] Search Pane: Extracting Search Criteria");
 		Map<String, String> criteria = new HashMap<>();
         Map<String, Date> dateCriteria = new HashMap<>();
 
@@ -135,11 +135,6 @@ public class WinRetrieveSearchPanel extends JPanel {
 		}
 		
 		ArrayList<FileRecord> results = fileRetrievalAPI.mongoSearch(criteria, dateCriteria);
-		
-		for(FileRecord entry : results) {
-			System.out.println("DsNet ID: " + entry.getDsNetId());
-		}
-		
 		return results;
 	}
 

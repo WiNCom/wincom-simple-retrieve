@@ -27,7 +27,7 @@ public class WinRetrieveConfigReader {
 	}
 
     private void init() {
-        configValues = new HashMap<String, String>();
+        configValues = new HashMap<>();
         parseConfig();
     }
 

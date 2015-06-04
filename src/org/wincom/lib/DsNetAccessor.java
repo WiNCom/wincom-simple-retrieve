@@ -33,7 +33,7 @@ public class DsNetAccessor {
 			
 			int responseCode = connection.getResponseCode();
 			if(responseCode != HttpURLConnection.HTTP_OK) {
-				System.out.println("Cannot Connect to DsNet!");
+				System.out.println("[-] Cannot Connect to DsNet!");
 				return;
 			};
 			
@@ -41,7 +41,6 @@ public class DsNetAccessor {
 			String saveFilePath = outputDirectory + File.separator + filename;
 			
 			FileOutputStream outputStream = new FileOutputStream(saveFilePath);
-			System.out.println("Downloading: " + filename + "\n\tDSnet ID: " + dsNetId);
 			int bytesRead = -1;
 			byte[] buffer = new byte[BUFFER_SIZE];
 			while((bytesRead = inputStream.read(buffer)) != -1) {
