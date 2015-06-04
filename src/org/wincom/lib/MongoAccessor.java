@@ -8,62 +8,49 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoCredential;
-import com.mongodb.MongoTimeoutException;
-import com.mongodb.ServerAddress;
+import com.mongodb.*;
 
 public class MongoAccessor {
-	private WinRetrieveConfig config;
+	private WinRetrieveConfigReader config;
 	
 	private DB db;
 	private DBCollection collection;
 	private MongoClient mongoClient;
 	
-	public MongoAccessor(WinRetrieveConfig config) {
+	public MongoAccessor(WinRetrieveConfigReader config) {
 		this.config = config;
+        connect();
 	}
 	
-	public boolean connect() {
+	private boolean connect() {
 		String host = config.getField("Mongo_Hostname");
 		int port = Integer.parseInt(config.getField("Mongo_Port"));
-		
-		String username = config.getUsername();
-		char[] password = config.getPassword();
-		
+
 		String database = config.getField("Mongo_Database");
 		String collectionName = config.getField("Mongo_Collection");
-		
-		MongoCredential credentials = MongoCredential.createMongoCRCredential(username, database, password);
-		List<String> databases = new ArrayList<String>();
+		List<String> databases;
 		
 		try {
 			ServerAddress address = new ServerAddress(host, port);
-			//mongoClient = new MongoClient(address, Arrays.asList(credentials));
 			mongoClient = new MongoClient(address);
 			databases = mongoClient.getDatabaseNames();
 		} catch (UnknownHostException e) {
-			System.out.println("Host Name '" + host + "' is invalid!");
+			System.out.println("[-] Host Name '" + host + "' is invalid!");
 			return false;
 		} catch(MongoTimeoutException e) {
-			System.out.println("We can't seem to connect to mongo");
+			System.out.println("[-] We can't seem to connect to mongo");
 			return false;
 		}
 		
 		if(!databases.contains(database)) {
-			System.out.println("Database Doesn't Exist Within Mongo!");
+			System.out.println("[-] Database Doesn't Exist Within Mongo!");
 			return false;
 		};
 		
 		db = mongoClient.getDB(database);
 		
 		if(!db.collectionExists(collectionName)) {
-			System.out.println("Collection Doesn't Exist Within Database!");
+			System.out.println("[-] Collection Doesn't Exist Within Database!");
 			return false;
 		}
 		
@@ -100,13 +87,22 @@ public class MongoAccessor {
 		return distinctResults;
 	}
 	
-	public ArrayList<FileRecord> search(Map<String, String> criteria) {
-		ArrayList<FileRecord> results = new ArrayList<FileRecord>();
+	public ArrayList<FileRecord> search(Map<String, String> criteria, Map<String, Date> dateCriteria) {
+		ArrayList<FileRecord> results = new ArrayList<>();
 		BasicDBObject query = new BasicDBObject();
+
+        if(dateCriteria.size() == 2) {
+            query.put("date", BasicDBObjectBuilder.start("$gte", dateCriteria.get("from")).add("$lte", dateCriteria.get("to")).get());
+        } else if(dateCriteria.size() == 1) {
+            if(dateCriteria.containsKey("from"))
+                query.put("date", new BasicDBObject("$gte", dateCriteria.get("from")));
+            else
+                query.put("date", new BasicDBObject("$lte", dateCriteria.get("to")));
+        }
 		
 		Iterator iterator = criteria.entrySet().iterator();
 		while(iterator.hasNext()) {
-			Map.Entry<String,String> entry = (Map.Entry<String,String>)iterator.next();
+			Map.Entry<String,String> entry = (Map.Entry)iterator.next();
 			query.append(entry.getKey(), entry.getValue());
 		}
 		

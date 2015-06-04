@@ -13,19 +13,17 @@ import javax.swing.table.DefaultTableModel;
 
 import org.wincom.lib.DsNetAccessor;
 import org.wincom.lib.FileRecord;
+import org.wincom.lib.FileRetrievalAPI;
 import org.wincom.lib.MongoAccessor;
 
 public class WinRetrieveContentPanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;
 	
 	private JTable contentTable;
-	private MongoAccessor mongo;
-	private DsNetAccessor dsNet;
 
-	public WinRetrieveContentPanel(MongoAccessor mongo, DsNetAccessor dsNet) {
-		this.mongo = mongo;
-		this.dsNet = dsNet;
-		
+	private FileRetrievalAPI fileRetrievalAPI;
+
+	public WinRetrieveContentPanel(FileRetrievalAPI fileRetrievalAPI) {
 		createTable();
 		this.getViewport().add(contentTable);
 	}
@@ -54,8 +52,8 @@ public class WinRetrieveContentPanel extends JScrollPane {
 				for(int rowIndex : selectedRows) {
 					String dsNetId = (String)model.getValueAt(rowIndex, 4);
 					String filename = (String)model.getValueAt(rowIndex, 0);
-					dsNet.downloadId(filename, dsNetId);
-					mongo.incrementDownloadCount(dsNetId);
+					fileRetrievalAPI.downloadId(filename, dsNetId);
+					fileRetrievalAPI.incrementDownloadCount(dsNetId);
 				}
 			}
 		});

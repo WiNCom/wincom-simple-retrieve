@@ -3,34 +3,35 @@ package org.wincom.gui;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import net.sourceforge.jdatepicker.DateModel;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 import org.wincom.lib.FileRecord;
-import org.wincom.lib.MongoAccessor;
+import org.wincom.lib.FileRetrievalAPI;
 
 public class WinRetrieveSearchPanel extends JPanel {
-	private static final long serialVersionUID = 1L;
-	
-	private MongoAccessor mongo;
-	private WinRetrieveWindow parent;
-	private Map<String, String> mongoFieldMap = new HashMap<String, String>();
-	private Map<String, JDatePickerImpl> dateFields = new HashMap<String, JDatePickerImpl>();
-	private Map<String, JComboBox<String>> selectedFields = new HashMap<String, JComboBox<String>>();
+	private FileRetrievalAPI fileRetrievalAPI;
 
-	public WinRetrieveSearchPanel(MongoAccessor mongo, WinRetrieveWindow parent) {
-		this.mongo = mongo;
+	private WinRetrieveQueryPane parent;
+	private Map<String, String> mongoFieldMap = new HashMap<>();
+	private Map<String, JDatePickerImpl> dateFields = new HashMap<>();
+	private Map<String, JComboBox<String>> selectedFields = new HashMap<>();
+
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("M-d-yyyy");
+
+	public WinRetrieveSearchPanel(FileRetrievalAPI fileRetrievalAPI, WinRetrieveQueryPane parent) {
+        this.fileRetrievalAPI = fileRetrievalAPI;
 		this.parent = parent;
 		
 		this.setLayout(new GridLayout(3,2));
@@ -56,7 +57,6 @@ public class WinRetrieveSearchPanel extends JPanel {
 		UtilDateModel model = new UtilDateModel();
 		JDatePanelImpl datePickPanel = new JDatePanelImpl(model);
 		JDatePickerImpl datePicker = new JDatePickerImpl(datePickPanel);
-		setDateToday(datePicker);
 		
 		dateFields.put(label, datePicker);
 		
@@ -70,10 +70,10 @@ public class WinRetrieveSearchPanel extends JPanel {
 		JPanel siteSelector = new JPanel();
 		siteSelector.setLayout(new GridLayout(1,2));
 		
-		JComboBox<String> sites = new JComboBox<String>();
+		JComboBox<String> sites = new JComboBox<>();
 		sites.addItem("Any");
 		
-		ArrayList<String> siteList = mongo.getDistinct("site");
+		ArrayList<String> siteList = fileRetrievalAPI.getDistinct("site");
 		for(String site : siteList) {
 			sites.addItem(site);
 		}
@@ -90,10 +90,10 @@ public class WinRetrieveSearchPanel extends JPanel {
 		JPanel sensorSelector = new JPanel();
 		sensorSelector.setLayout(new GridLayout(1,2));
 		
-		JComboBox<String> sensors = new JComboBox<String>();
+		JComboBox<String> sensors = new JComboBox<>();
 		sensors.addItem("Any");
 		
-		ArrayList<String> sensorList = mongo.getDistinct("format");
+		ArrayList<String> sensorList = fileRetrievalAPI.getDistinct("format");
 		for(String sensor : sensorList) {
 			sensors.addItem(sensor);
 		}
@@ -106,20 +106,9 @@ public class WinRetrieveSearchPanel extends JPanel {
 		return sensorSelector;
 	}
 	
-	private void setDateToday(JDatePickerImpl datePicker) {
-		Calendar now = Calendar.getInstance();
-		
-		int year = now.get(Calendar.YEAR);
-		int month = now.get(Calendar.MONTH);
-		int day = now.get(Calendar.DAY_OF_MONTH);		
-		
-		datePicker.getModel().setDate(year, month, day);
-		datePicker.getModel().setSelected(true);
-	}
-	
 	private void clearSearchFields() {
 		for(Map.Entry<String, JDatePickerImpl> entry : dateFields.entrySet()) {
-			setDateToday(entry.getValue());
+            entry.getValue().getModel().setSelected(false);
 		}
 		
 		for(Map.Entry<String, JComboBox<String>> entry : selectedFields.entrySet()) {
@@ -129,11 +118,13 @@ public class WinRetrieveSearchPanel extends JPanel {
 	
 	private ArrayList<FileRecord> executeSearch() {
 		System.out.println("Executing Search...");
-		Map<String, String> criteria = new HashMap<String, String>();
-		
-		for(Map.Entry<String, JDatePickerImpl> entry : dateFields.entrySet()) {
-			
-		}
+		Map<String, String> criteria = new HashMap<>();
+        Map<String, Date> dateCriteria = new HashMap<>();
+
+        if(dateFields.get("From Date").getModel().isSelected())
+            dateCriteria.put("from", getDateFromModel(dateFields.get("From Date").getModel()));
+        if(dateFields.get("To Date").getModel().isSelected())
+            dateCriteria.put("to", getDateFromModel(dateFields.get("To Date").getModel()));
 		
 		for(Map.Entry<String, JComboBox<String>> entry : selectedFields.entrySet()) {
 			String label = entry.getKey();
@@ -143,7 +134,7 @@ public class WinRetrieveSearchPanel extends JPanel {
 				criteria.put(mongoFieldMap.get(label), value);
 		}
 		
-		ArrayList<FileRecord> results = mongo.search(criteria);	
+		ArrayList<FileRecord> results = fileRetrievalAPI.mongoSearch(criteria, dateCriteria);
 		
 		for(FileRecord entry : results) {
 			System.out.println("DsNet ID: " + entry.getDsNetId());
@@ -151,6 +142,22 @@ public class WinRetrieveSearchPanel extends JPanel {
 		
 		return results;
 	}
+
+    private Date getDateFromModel(DateModel model) {
+        Date formattedDate = new Date();
+        int day = model.getDay();
+        int month = model.getMonth()+1;
+        int year = model.getYear();
+        String date = month + "-" + day + "-" + year;
+
+        try {
+            formattedDate = dateFormat.parse(date);
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+
+        return formattedDate;
+    }
 	
 	private JButton clearButton() {
 		JButton clearButton = new JButton("Clear");

@@ -1,8 +1,5 @@
 package org.wincom.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -26,21 +23,7 @@ public class WinRetrieveMenuBar extends JMenuBar {
 		
 		JMenuItem configMongo = new JMenuItem("Configure Mongo");
 		JMenuItem configDSnet = new JMenuItem("Configure DSnet");
-		
-		/*configMongo.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				new MongoConfigWindow(parent);
-			}
-		});
-		
-		configDSnet.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				new DSnetConfigWindow(parent);
-			}
-		});
-		*/
+
 		fileMenu.add(configMongo);
 		fileMenu.add(configDSnet);
 		

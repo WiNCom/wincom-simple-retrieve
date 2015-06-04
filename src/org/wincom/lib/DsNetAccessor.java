@@ -4,37 +4,23 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.PasswordAuthentication;
 import java.net.URL;
 
 public class DsNetAccessor {
 	private static final int BUFFER_SIZE = 4096;
-	
-	private String username;
-	private char[] password;
 	
 	private String hostname;
 	private String vaultType;
 	private String vaultName;
 	private String outputDirectory;
 	
-	public DsNetAccessor(WinRetrieveConfig config) {
-		username = config.getUsername();
-		password = config.getPassword();
-		
+	public DsNetAccessor(WinRetrieveConfigReader config) {
 		hostname = config.getField("DSnet_Hostname");
 		vaultType = config.getField("DSnet_Type");
 		vaultName = config.getField("DSnet_Vault");
 		outputDirectory = config.getField("Output_Directory");
-		
-		setupAuthenticator(username, password);
-	}
-	
-	public boolean testConnection() {
-		return true;
 	}
 	
 	public void downloadId(String filename, String dsNetId) {
@@ -72,13 +58,4 @@ public class DsNetAccessor {
 			return;
 		}
 	}
-	
-	private void setupAuthenticator(String username, char[] password) {
-		Authenticator.setDefault(new Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username, password);
-			}
-		});
-	}
-
 }

@@ -41,3 +41,11 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# IntelliJ IDE Files
+.idea
+
+#Compiled Binaries
+out
+
+src/resources/winretrieve.conf
