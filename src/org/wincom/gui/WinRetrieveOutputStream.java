@@ -42,4 +42,36 @@ public class WinRetrieveOutputStream extends OutputStream {
             stringBuilder.append((char)nextByte);
         }
     }
+
+    public void filter(String filterCriteria) {
+        String allText = terminal.getText();
+        String[] lines = allText.split(System.getProperty("line.separator"));
+        String match = "";
+
+        if(filterCriteria.equals("MongoDB"))
+            match = "Mongo";
+        else if(filterCriteria.equals("DsNet"))
+            match = "DsNet";
+        else if(filterCriteria.equals("Errors"))
+            match = "[-]";
+        else if(filterCriteria.equals("Messages"))
+            match = "[+]";
+
+        String outputString = "";
+        for(String row : lines) {
+            if(row.contains(match))
+                continue;
+            else
+               outputString += row + "\n";
+        }
+
+        final String terminalString = outputString;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                terminal.setText(terminalString);
+                terminal.setCaretPosition(terminal.getDocument().getLength());
+            }
+        });
+    }
 }
