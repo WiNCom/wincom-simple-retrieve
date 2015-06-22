@@ -1,4 +1,4 @@
-package org.wincom.lib;
+package org.wincom.external;
 
 import java.io.*;
 import java.net.URLDecoder;
@@ -6,23 +6,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WinRetrieveConfigReader {
-    private static final String DEFAULT_CONFIG = WinRetrieveConfigReader.class.getClassLoader().getResource("resources/winretrieve.conf").getPath();
+    private static final String DEFAULT_CONFIG = "winretrieve.conf";
 
     private String configPath;
+    private InputStream configStream;
 	Map<String, String> configValues;
 
 	public WinRetrieveConfigReader() {
-        try {
-            this.configPath = URLDecoder.decode(DEFAULT_CONFIG, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
+        configPath = ResourceLoader.getResource(DEFAULT_CONFIG);
+        configStream = ResourceLoader.getResourceAsStream(DEFAULT_CONFIG);
         init();
     }
 
 	public WinRetrieveConfigReader(String configFile) {
-        this.configPath = configFile;
+        configPath = configFile;
+        configStream = ResourceLoader.getResourceAsStream(configFile);
 		init();
 	}
 
@@ -35,7 +33,7 @@ public class WinRetrieveConfigReader {
         System.out.println("[+] Parsing Config: " + configPath);
 
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(configPath));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(configStream));
             String currentLine;
 
             while ((currentLine = reader.readLine()) != null) {

@@ -1,5 +1,7 @@
 package org.wincom.lib;
 
+import org.wincom.external.WinRetrieveConfigReader;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

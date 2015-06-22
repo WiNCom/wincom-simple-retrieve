@@ -2,7 +2,7 @@ package org.wincom.execute;
 
 import org.wincom.gui.WinRetrieveWindow;
 import org.wincom.lib.FileRetrievalAPI;
-import org.wincom.lib.WinRetrieveConfigReader;
+import org.wincom.external.WinRetrieveConfigReader;
 
 public class WinRetrieve {
 	

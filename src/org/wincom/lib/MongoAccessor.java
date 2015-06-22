@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mongodb.*;
+import org.wincom.external.WinRetrieveConfigReader;
 
 public class MongoAccessor {
 	private WinRetrieveConfigReader config;

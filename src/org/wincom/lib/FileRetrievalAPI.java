@@ -1,5 +1,7 @@
 package org.wincom.lib;
 
+import org.wincom.external.WinRetrieveConfigReader;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
