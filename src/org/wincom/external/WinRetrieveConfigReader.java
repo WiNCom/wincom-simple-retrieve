@@ -55,6 +55,9 @@ public class WinRetrieveConfigReader {
     }
 	
 	public String getField(String field) {
+        if(field.equals("Output_Directory") && !configValues.containsKey("Output_Directory"))
+            return (System.getProperty("user.home") + File.separator + "Downloads");
+
 		return configValues.get(field);
 	}
 }
