@@ -1,7 +1,6 @@
 package org.wincom.external;
 
 import java.io.*;
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +24,7 @@ public class WinRetrieveConfigReader {
 	}
 
     private void init() {
-        configValues = new HashMap<>();
+        configValues = new HashMap<String, String>();
         parseConfig();
     }
 

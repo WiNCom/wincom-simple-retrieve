@@ -19,7 +19,7 @@ public class WinRetrieveDebugPane extends JPanel implements ItemListener {
     }
 
     private void init() {
-        filterSelectors = new HashMap<>();
+        filterSelectors = new HashMap<JCheckBox, String>();
         this.setLayout(new BorderLayout());
         initFilters();
 

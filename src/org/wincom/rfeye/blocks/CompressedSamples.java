@@ -18,8 +18,8 @@ public class CompressedSamples implements RFEyeDataBlock {
     private int nvals;
     private int npads;
     private int nbytes;
-    ArrayList<Integer> data = new ArrayList<>();
-    ArrayList<Integer> pad = new ArrayList<>();
+    ArrayList<Integer> data = new ArrayList<Integer>();
+    ArrayList<Integer> pad = new ArrayList<Integer>();
 
     public CompressedSamples() {
 

@@ -1,12 +1,7 @@
 package org.wincom.lib;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.mongodb.*;
 import org.wincom.external.WinRetrieveConfigReader;
@@ -29,12 +24,14 @@ public class MongoAccessor {
 
 		String database = config.getField("Mongo_Database");
 		String collectionName = config.getField("Mongo_Collection");
-		List<String> databases;
+
+		String username = config.getField("Mongo_Username");
+      char[] password = config.getField("Mongo_Password").toCharArray();
+      MongoCredential credential = MongoCredential.createCredential(username, database, password);
 		
 		try {
 			ServerAddress address = new ServerAddress(host, port);
-			mongoClient = new MongoClient(address);
-			databases = mongoClient.getDatabaseNames();
+			mongoClient = new MongoClient(address, Collections.singletonList(credential));
 		} catch (UnknownHostException e) {
 			System.out.println("[-] Mongo: Host Name '" + host + "' is invalid!");
 			return false;
@@ -42,12 +39,7 @@ public class MongoAccessor {
 			System.out.println("[-] Mongo: We can't seem to connect to mongo");
 			return false;
 		}
-		
-		if(!databases.contains(database)) {
-			System.out.println("[-] Mongo: Database Doesn't Exist Within Mongo!");
-			return false;
-		};
-		
+
 		db = mongoClient.getDB(database);
 		
 		if(!db.collectionExists(collectionName)) {
@@ -75,7 +67,7 @@ public class MongoAccessor {
 	}
 	
 	public ArrayList<String> getDistinct(String columnName) {
-		ArrayList<String> distinctResults = new ArrayList<>();
+		ArrayList<String> distinctResults = new ArrayList<String>();
 		
 		List<String> queryResults = collection.distinct(columnName);
 		Collections.sort(queryResults);
@@ -89,7 +81,7 @@ public class MongoAccessor {
 	}
 	
 	public ArrayList<FileRecord> search(Map<String, String> criteria, Map<String, Date> dateCriteria) {
-		ArrayList<FileRecord> results = new ArrayList<>();
+		ArrayList<FileRecord> results = new ArrayList<FileRecord>();
 		BasicDBObject query = new BasicDBObject();
 
         if(dateCriteria.size() == 2) {
@@ -118,7 +110,7 @@ public class MongoAccessor {
 				record.setFilename((String)result.get("filename"));
 				record.setLocation((String)result.get("site"));
 				record.setDsNetId((String)result.get("dsnet_id"));
-				record.setDownloads((int)result.get("downloads"));
+				record.setDownloads((Integer)result.get("downloads"));
 				record.setSensor((String)result.get("format"));
 				record.setDate((Date)result.get("date"));
 				

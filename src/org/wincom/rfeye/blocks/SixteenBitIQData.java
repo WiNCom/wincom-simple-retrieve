@@ -14,9 +14,9 @@ public class SixteenBitIQData implements RFEyeDataBlock {
     private int antenna;
     private int samples;
     private int nfreqs;
-    private ArrayList<Integer> gains = new ArrayList<>();
+    private ArrayList<Integer> gains = new ArrayList<Integer>();
     private int nvals;
-    private ArrayList<Integer> iqvals = new ArrayList<>();
+    private ArrayList<Integer> iqvals = new ArrayList<Integer>();
 
     public SixteenBitIQData() {
 

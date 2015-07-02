@@ -24,9 +24,9 @@ public class WinRetrieveSearchPanel extends JPanel {
 	private FileRetrievalAPI fileRetrievalAPI;
 
 	private WinRetrieveQueryPane parent;
-	private Map<String, String> mongoFieldMap = new HashMap<>();
-	private Map<String, JDatePickerImpl> dateFields = new HashMap<>();
-	private Map<String, JComboBox<String>> selectedFields = new HashMap<>();
+	private Map<String, String> mongoFieldMap = new HashMap<String, String>();
+	private Map<String, JDatePickerImpl> dateFields = new HashMap<String, JDatePickerImpl>();
+	private Map<String, JComboBox<String>> selectedFields = new HashMap<String, JComboBox<String>>();
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("M-d-yyyy");
 
@@ -70,7 +70,7 @@ public class WinRetrieveSearchPanel extends JPanel {
 		JPanel siteSelector = new JPanel();
 		siteSelector.setLayout(new GridLayout(1,2));
 		
-		JComboBox<String> sites = new JComboBox<>();
+		JComboBox<String> sites = new JComboBox<String>();
 		sites.addItem("Any");
 		
 		ArrayList<String> siteList = fileRetrievalAPI.getDistinct("site");
@@ -90,7 +90,7 @@ public class WinRetrieveSearchPanel extends JPanel {
 		JPanel sensorSelector = new JPanel();
 		sensorSelector.setLayout(new GridLayout(1,2));
 		
-		JComboBox<String> sensors = new JComboBox<>();
+		JComboBox<String> sensors = new JComboBox<String>();
 		sensors.addItem("Any");
 		
 		ArrayList<String> sensorList = fileRetrievalAPI.getDistinct("format");
@@ -118,8 +118,8 @@ public class WinRetrieveSearchPanel extends JPanel {
 	
 	private ArrayList<FileRecord> executeSearch() {
 		System.out.println("[+] Search Pane: Extracting Search Criteria");
-		Map<String, String> criteria = new HashMap<>();
-        Map<String, Date> dateCriteria = new HashMap<>();
+		Map<String, String> criteria = new HashMap<String, String>();
+        Map<String, Date> dateCriteria = new HashMap<String, Date>();
 
         if(dateFields.get("From Date").getModel().isSelected())
             dateCriteria.put("from", getDateFromModel(dateFields.get("From Date").getModel()));

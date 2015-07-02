@@ -21,7 +21,7 @@ public class RFEyeFileParser {
             FileInputStream fileInputStream = new FileInputStream(fileToParse);
             BufferedInputStream inputStream = new BufferedInputStream(fileInputStream);
             DataInputStream dataStream = new DataInputStream(inputStream);
-            ArrayList<RFEyeDataBlock> dataBlocks = new ArrayList<>();
+            ArrayList<RFEyeDataBlock> dataBlocks = new ArrayList<RFEyeDataBlock>();
 
 
             FileHeader header = readHeader(dataStream);

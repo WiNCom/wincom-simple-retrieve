@@ -11,8 +11,8 @@ public class FileDownloaderThread implements Runnable {
     public FileDownloaderThread(DsNetAccessor dsNet, MongoAccessor mongo, String filename, String dsNetId) {
         this.dsNet = dsNet;
         this.mongo = mongo;
-        filenames = new ArrayList<>();
-        dsNetIds = new ArrayList<>();
+        filenames = new ArrayList<String>();
+        dsNetIds = new ArrayList<String>();
 
         filenames.add(filename);
         dsNetIds.add(dsNetId);
@@ -21,8 +21,8 @@ public class FileDownloaderThread implements Runnable {
     public FileDownloaderThread(DsNetAccessor dsNet, MongoAccessor mongo, ArrayList<String> filenames, ArrayList<String> dsNetIds) {
         if(filenames.size() != dsNetIds.size()) {
             System.out.println("[-] Downloader: Filenames and DsNet IDs are out of sync! Skipping download...");
-            this.filenames = new ArrayList<>();
-            this.dsNetIds = new ArrayList<>();
+            this.filenames = new ArrayList<String>();
+            this.dsNetIds = new ArrayList<String>();
         } else {
             this.dsNet = dsNet;
             this.mongo = mongo;

@@ -13,7 +13,7 @@ public class Band {
         this.startFrequency = startFrequency;
         this.stopFrequency = stopFrequency;
         this.resolution = resolution;
-        scans = new ArrayList<>();
+        scans = new ArrayList<Scan>();
     }
 
     public void addScan(Date startTime, Date stopTime, ArrayList<Double> powers) {

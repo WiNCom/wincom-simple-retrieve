@@ -18,8 +18,8 @@ public class OccupancyOverTime implements RFEyeDataBlock {
     private int number;
     private int npads;
     private int nbytes;
-    private ArrayList<Integer> data = new ArrayList<>();
-    private ArrayList<Integer> pad = new ArrayList<>();
+    private ArrayList<Integer> data = new ArrayList<Integer>();
+    private ArrayList<Integer> pad = new ArrayList<Integer>();
 
     public OccupancyOverTime() {
 

@@ -11,10 +11,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import org.wincom.lib.DsNetAccessor;
 import org.wincom.lib.FileRecord;
 import org.wincom.lib.FileRetrievalAPI;
-import org.wincom.lib.MongoAccessor;
 
 public class WinRetrieveContentPanel extends JScrollPane {
 	private static final long serialVersionUID = 1L;
@@ -50,8 +48,8 @@ public class WinRetrieveContentPanel extends JScrollPane {
 				DefaultTableModel model = (DefaultTableModel)contentTable.getModel();
 				
 				int[] selectedRows = contentTable.getSelectedRows();
-				ArrayList<String> selectedFilenames = new ArrayList<>();
-                ArrayList<String> selectedDsNetIds = new ArrayList<>();
+				ArrayList<String> selectedFilenames = new ArrayList<String>();
+                ArrayList<String> selectedDsNetIds = new ArrayList<String>();
 
 				for(int rowIndex : selectedRows) {
 					selectedDsNetIds.add((String)model.getValueAt(rowIndex, 4));

@@ -15,8 +15,8 @@ public class EightBitSpectralData implements RFEyeDataBlock {
     private int processing;
     private int npads;
     private int nbytes;
-    private ArrayList<Integer> data = new ArrayList<>();
-    private ArrayList<Integer> pads = new ArrayList<>();
+    private ArrayList<Integer> data = new ArrayList<Integer>();
+    private ArrayList<Integer> pads = new ArrayList<Integer>();
 
 
     public EightBitSpectralData() {
