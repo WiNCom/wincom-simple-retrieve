@@ -4,13 +4,11 @@ import java.util.ArrayList;
 
 public class FileDownloaderThread implements Runnable {
     private DsNetAccessor dsNet;
-    private MongoAccessor mongo;
     private ArrayList<String> filenames;
     private ArrayList<String> dsNetIds;
 
-    public FileDownloaderThread(DsNetAccessor dsNet, MongoAccessor mongo, String filename, String dsNetId) {
+    public FileDownloaderThread(DsNetAccessor dsNet, String filename, String dsNetId) {
         this.dsNet = dsNet;
-        this.mongo = mongo;
         filenames = new ArrayList<String>();
         dsNetIds = new ArrayList<String>();
 
@@ -18,14 +16,13 @@ public class FileDownloaderThread implements Runnable {
         dsNetIds.add(dsNetId);
     }
 
-    public FileDownloaderThread(DsNetAccessor dsNet, MongoAccessor mongo, ArrayList<String> filenames, ArrayList<String> dsNetIds) {
+    public FileDownloaderThread(DsNetAccessor dsNet, ArrayList<String> filenames, ArrayList<String> dsNetIds) {
         if(filenames.size() != dsNetIds.size()) {
             System.out.println("[-] Downloader: Filenames and DsNet IDs are out of sync! Skipping download...");
             this.filenames = new ArrayList<String>();
             this.dsNetIds = new ArrayList<String>();
         } else {
             this.dsNet = dsNet;
-            this.mongo = mongo;
             this.filenames = filenames;
             this.dsNetIds = dsNetIds;
         }
@@ -45,7 +42,6 @@ public class FileDownloaderThread implements Runnable {
 
             System.out.println("[+] Downloader: Downloading File: " + filename);
             dsNet.downloadId(filename, dsNetId);
-            mongo.incrementDownloadCount(dsNetId);
             System.out.println("[+] Downloader: Completed Downloading File: " + filename);
         }
 

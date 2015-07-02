@@ -28,7 +28,7 @@ public class WinRetrieveContentPanel extends JScrollPane {
 	}
 	
 	private void createTable() {
-		String[] columnNames = {"Filename", "Date", "Location", "Sensor", "DSnet ID", "Downloads"};
+		String[] columnNames = {"Filename", "Date", "Location", "Sensor", "DSnet ID"};
 		Object[][] data = {};
 		
 		contentTable = new JTable(new DefaultTableModel(data, columnNames));
@@ -81,10 +81,9 @@ public class WinRetrieveContentPanel extends JScrollPane {
 			String dsNetId = entry.getDsNetId();
 			String location = entry.getLocation();
 			String sensor = entry.getSensor();
-			String downloads = Integer.toString(entry.getDownloads());
 			String date = entry.getDate().toString();
 			
-			model.addRow(new Object[]{filename, date, location, sensor, dsNetId, downloads});
+			model.addRow(new Object[]{filename, date, location, sensor, dsNetId});
 		}
 	}
 

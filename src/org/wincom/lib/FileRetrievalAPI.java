@@ -27,10 +27,10 @@ public class FileRetrievalAPI {
     }
 
     public void downloadId(String filename, String dsNetId) {
-        (new Thread(new FileDownloaderThread(dsNet, mongo, filename, dsNetId))).start();
+        (new Thread(new FileDownloaderThread(dsNet, filename, dsNetId))).start();
     }
 
     public void downloadMany(ArrayList<String> filenames, ArrayList<String> dsNetIds) {
-        (new Thread(new FileDownloaderThread(dsNet, mongo, filenames, dsNetIds))).start();
+        (new Thread(new FileDownloaderThread(dsNet, filenames, dsNetIds))).start();
     }
 }
