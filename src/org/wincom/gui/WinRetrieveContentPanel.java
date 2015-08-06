@@ -1,6 +1,6 @@
 package org.wincom.gui;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import org.wincom.lib.FileRecord;
@@ -32,6 +33,7 @@ public class WinRetrieveContentPanel extends JScrollPane {
 		Object[][] data = {};
 		
 		contentTable = new JTable(new DefaultTableModel(data, columnNames));
+		contentTable.setAutoCreateRowSorter(true);
 		contentTable.setFillsViewportHeight(true);
 		contentTable.setShowGrid(true);
 		contentTable.setGridColor(Color.GRAY);

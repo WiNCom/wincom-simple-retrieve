@@ -7,8 +7,8 @@ public class FileRecord {
 	private String dsNetId;
 	private String location;
 	private String sensor;
-	private Date date;
-	private int downloads;
+	private String format;
+	private String date;
 	
 	public FileRecord() {
 		
@@ -30,20 +30,20 @@ public class FileRecord {
 		this.sensor = sensor;
 	}
 
-	public Date getDate() {
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
-	}
-
-	public int getDownloads() {
-		return downloads;
-	}
-
-	public void setDownloads(int downloads) {
-		this.downloads = downloads;
 	}
 
 	public String getFilename() {

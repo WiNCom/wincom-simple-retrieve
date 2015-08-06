@@ -47,7 +47,7 @@ public class WinRetrieveSearchPanel extends JPanel {
 	
 	private void initializeMongoMap() {
 		mongoFieldMap.put("Site", "site");
-		mongoFieldMap.put("Sensor", "format");
+		mongoFieldMap.put("Sensor", "sensor");
 	}
 	
 	private JPanel datePanel(String label) {
@@ -93,7 +93,7 @@ public class WinRetrieveSearchPanel extends JPanel {
 		JComboBox<String> sensors = new JComboBox<String>();
 		sensors.addItem("Any");
 		
-		ArrayList<String> sensorList = fileRetrievalAPI.getDistinct("format");
+		ArrayList<String> sensorList = fileRetrievalAPI.getDistinct("sensor");
 		for(String sensor : sensorList) {
 			sensors.addItem(sensor);
 		}

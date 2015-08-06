@@ -1,6 +1,8 @@
 package org.wincom.lib;
 
 import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.mongodb.*;
@@ -12,9 +14,13 @@ public class MongoAccessor {
 	private DB db;
 	private DBCollection collection;
 	private MongoClient mongoClient;
+
+	private DateFormat formatter;
 	
 	public MongoAccessor(WinRetrieveConfigReader config) {
 		this.config = config;
+		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         connect();
 	}
 	
@@ -54,16 +60,6 @@ public class MongoAccessor {
 	
 	public void disconnect() {
 		mongoClient.close();
-	}
-	
-	public void incrementDownloadCount(String dsNetId) {
-		BasicDBObject update = new BasicDBObject().append("$inc",
-				new BasicDBObject().append("downloads", 1));
-		
-		BasicDBObject searchQuery = new BasicDBObject();
-		searchQuery.append("dsnet_id", dsNetId);
-		
-		collection.update(searchQuery, update);
 	}
 	
 	public ArrayList<String> getDistinct(String columnName) {
@@ -108,11 +104,11 @@ public class MongoAccessor {
 				
 				FileRecord record = new FileRecord();
 				record.setFilename((String)result.get("filename"));
-				record.setLocation((String)result.get("site"));
-				record.setDsNetId((String)result.get("dsnet_id"));
-				record.setDownloads((Integer)result.get("downloads"));
-				record.setSensor((String)result.get("format"));
-				record.setDate((Date)result.get("date"));
+				record.setLocation((String) result.get("site"));
+				record.setDsNetId((String) result.get("dsnet_id"));
+				record.setSensor((String) result.get("sensor"));
+				record.setFormat((String) result.get("format"));
+				record.setDate(formatter.format((Date) result.get("date")));
 				
 				results.add(record);
 			}
