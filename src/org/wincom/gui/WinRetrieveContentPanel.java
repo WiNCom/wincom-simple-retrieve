@@ -54,8 +54,9 @@ public class WinRetrieveContentPanel extends JScrollPane {
                 ArrayList<String> selectedDsNetIds = new ArrayList<String>();
 
 				for(int rowIndex : selectedRows) {
-					selectedDsNetIds.add((String)model.getValueAt(rowIndex, 4));
-					selectedFilenames.add((String)model.getValueAt(rowIndex, 0));
+					int realIndex = contentTable.convertRowIndexToModel(rowIndex);
+					selectedDsNetIds.add((String)model.getValueAt(realIndex, 4));
+					selectedFilenames.add((String)model.getValueAt(realIndex, 0));
 				}
 
                 fileRetrievalAPI.downloadMany(selectedFilenames, selectedDsNetIds);
